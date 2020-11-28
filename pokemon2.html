@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+    <!-- <script src="jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <style>
+        body, div {
+            display: inline-block;
+            background-color: rgb(178, 221, 214);
+        }
+        div.pokemon {
+            width: 80%;
+            vertical-align: top;
+        }
+        div#infopkm {
+            width: 19%;
+            min-height: 200px;
+            border: 5px solid red;
+            position: fixed;
+        }
+        img {
+            border: 2px solid grey;
+            border-radius: 10px;
+            background-color: rgba(131, 238, 202, 0.589);
+        }
+        img:hover {
+            box-shadow: 0px 0px 8px rgb(49, 58, 45);
+        }
+        img:active {
+            border: 2px solid rgb(219, 129, 129);
+        }
+        h1, h3, p {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pokemon"></div>
+    <div id="infopkm">
+        <h1>Has click en un pokemon</h1>
+    </div>
+    <script>
+        $(document).ready(function(){
+
+        for (var i=1; i<=151; i++){
+        var ouput = ''
+            $('div.pokemon').append('<img id="'+i+'" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+i+'.png" alt="pokemon">')
+        }
+
+        $('img').click(function(){
+
+            let num =  $(this).attr('id');
+            $.get("https://pokeapi.co/api/v2/pokemon/"+num+"/", function(res) {
+                var html_str = "<h1>"+res.name+"</h1>";
+                html_str += "<img src='"+res.sprites.other["official-artwork"].front_default+"' style='width:100%'>"
+                html_str += "<h3>Types</h3>";
+                html_str += "<ul>"; 
+                for(var i = 0; i < res.types.length; i++) {
+                    html_str += "<li>" + res.types[i].type.name + "</li>";
+                }
+                html_str += "</ul>";
+                html_str += "<h3>Heigth</h3>"
+                html_str += "<p>" + res.height + "</p>"
+                html_str += "<h3>wheight</h3>"
+                html_str += "<p>" + res.weight + "</p>"
+                $('#infopkm').html(html_str)
+
+            }, "json");
+
+        });
+
+    });
+    </script>
+</body>
+</html>
